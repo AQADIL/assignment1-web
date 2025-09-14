@@ -1,0 +1,384 @@
+:root {
+    --bg-color: #fff;
+    --text-color: #222;
+    --hr-color: #e0e0e0;
+    --accent: #4CAF50;
+}
+
+.dark-theme {
+    --bg-color: #181a1b;
+    --text-color: #e2e2e2;
+    --hr-color: #333;
+    --accent: #90caf9;
+}
+
+html, body {
+    background: var(--bg-color);
+    color: var(--text-color);
+    min-height: 100vh;
+    width: 100vw;
+    transition: background 0.5s cubic-bezier(.4,0,.2,1), color 0.5s cubic-bezier(.4,0,.2,1);
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+hr {
+    border: none;
+    border-top: 2px solid var(--hr-color);
+    margin: 32px 0 24px;
+    transition: border-color 0.5s cubic-bezier(.4,0,.2,1);
+}
+
+a {
+    color: var(--accent);
+    transition: color 0.5s cubic-bezier(.4,0,.2,1);
+    text-decoration: none;
+}
+
+button.theme-toggle {
+    position: fixed;
+    top: 18px;
+    right: 24px;
+    z-index: 999;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 22px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    transition: background 0.5s cubic-bezier(.4,0,.2,1), color 0.5s cubic-bezier(.4,0,.2,1);
+}
+
+button.theme-toggle:active {
+    filter: brightness(0.95);
+}
+
+.container {
+    max-width: 700px;
+    margin: 32px auto;
+    padding: 16px 18px;
+    border-radius: 20px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    background: rgba(255,255,255,0.97);
+    transition: background 0.5s, color 0.5s;
+}
+
+.dark-theme .container {
+    background: rgba(24,26,27,0.98);
+    color: #e2e2e2;
+}
+
+header, footer {
+    background: var(--bg-color);
+    color: var(--text-color);
+    transition: background 0.5s, color 0.5s;
+    padding: 12px 0;
+    text-align: center;
+}
+
+.dark-theme header, .dark-theme footer {
+    background: #23272a;
+    color: #e2e2e2;
+}
+
+.schedule-table, .layout-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.schedule-table th, .schedule-table td, .layout-table th, .layout-table td {
+    border: 1px solid var(--hr-color);
+    padding: 8px 10px;
+    text-align: left;
+    background: inherit;
+}
+
+.schedule-table th {
+    background: var(--hr-color);
+}
+
+.dark-theme .schedule-table th {
+    background: #23272a;
+    color: #e2e2e2;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: transparent;
+    padding: 18px 0 0 0;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 12px rgba(60,60,60,0.06);
+    animation: fadeInForm 0.7s cubic-bezier(.4,0,.2,1);
+}
+
+@keyframes fadeInForm {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: none; }
+}
+
+.contact-form label {
+    font-weight: 600;
+    margin-bottom: 2px;
+    color: var(--text-color);
+    letter-spacing: 0.02em;
+    font-size: 15px;
+    transition: color 0.4s;
+}
+
+.contact-form input[type="text"], 
+.contact-form input[type="email"] {
+    padding: 10px 12px;
+    border-radius: 7px;
+    border: 1.5px solid #bbb;
+    font-size: 16px;
+    background: var(--bg-color);
+    color: var(--text-color);
+    outline: none;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    transition: border-color 0.35s, box-shadow 0.35s, background 0.5s, color 0.5s;
+}
+
+.contact-form input[type="text"]:focus, 
+.contact-form input[type="email"]:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(76,175,80,0.15);
+}
+
+.contact-form input[type="color"] {
+    width: 44px;
+    height: 34px;
+    border: none;
+    background: none;
+    margin-top: 3px;
+    cursor: pointer;
+    transition: box-shadow 0.3s;
+}
+
+.contact-form input[type="color"]:focus {
+    box-shadow: 0 0 0 2px var(--accent);
+}
+
+#submitBtn {
+    margin-top: 12px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    padding: 14px 0;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 12px rgba(76, 175, 80, 0.2);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    letter-spacing: 0.03em;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+#submitBtn:hover {
+    background: #388e3c;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(76, 175, 80, 0.3);
+}
+
+#submitBtn:active {
+    background: #2e7031;
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);
+}
+
+
+/* Стили для сообщений формы */
+.form-message {
+    margin-top: 16px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-weight: 500;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.4s cubic-bezier(.4,0,.2,1);
+    text-align: center;
+}
+
+.form-message.success {
+    background: rgba(46, 125, 50, 0.1);
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+    opacity: 1;
+    transform: none;
+}
+
+.form-message.error {
+    background: rgba(211, 47, 47, 0.1);
+    color: #d32f2f;
+    border: 1px solid #ef9a9a;
+    opacity: 1;
+    transform: none;
+}
+
+/* Анимация кнопки */
+#submitBtn {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-text {
+    display: inline-block;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.btn-loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    width: 24px;
+    height: 24px;
+}
+
+#submitBtn.loading .btn-text {
+    transform: translateY(20px);
+    opacity: 0;
+}
+
+#submitBtn.loading .btn-loader {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+}
+
+/* Стили для кнопки темы */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+    background: var(--accent-dark);
+}
+
+/* Дополнительные стили для тёмной темы */
+.dark-theme .contact-form input[type="text"],
+.dark-theme .contact-form input[type="email"] {
+    background: #2a2d2e;
+    border-color: #3a3a3a;
+    color: #e2e2e2;
+}
+
+.dark-theme .contact-form input[type="text"]:focus,
+.dark-theme .contact-form input[type="email"]:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(144, 202, 249, 0.15);
+}
+
+.dark-theme .contact-form input[type="submit"] {
+    background: var(--accent);
+}
+
+.dark-theme .contact-form input[type="submit"]:hover {
+    background: #64b5f6;
+}
+
+.dark-theme .contact-form input[type="submit"]:active {
+    background: #42a5f5;
+}
+
+/* Стили для переключателя темы */
+.theme-toggle-wrapper {
+    position: fixed;
+    top: 22px;
+    right: 36px;
+    z-index: 9999;
+}
+
+.theme-toggle-input { 
+    display: none; 
+}
+
+.theme-toggle-label {
+    display: flex; 
+    align-items: center; 
+    cursor: pointer; 
+    position: relative;
+    width: 70px; 
+    height: 36px; 
+    background: var(--hr-color); 
+    border-radius: 20px; 
+    transition: background 0.5s;
+}
+
+.theme-toggle-label .toggle-slider {
+    position: absolute; 
+    left: 6px; 
+    top: 6px; 
+    width: 24px; 
+    height: 24px;
+    background: var(--accent); 
+    border-radius: 50%; 
+    transition: left 0.45s cubic-bezier(.4,0,.2,1), background 0.5s;
+    z-index: 2;
+}
+
+.theme-toggle-input:checked + .theme-toggle-label .toggle-slider {
+    left: 40px; 
+    background: var(--accent);
+}
+
+.theme-toggle-label .icon {
+    width: 24px; 
+    height: 24px; 
+    display: block; 
+    position: absolute; 
+    top: 6px; 
+    transition: transform 0.7s cubic-bezier(.4,0,.2,1);
+    background-size: 20px; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    opacity: 0.7;
+}
+
+.theme-toggle-label .sun {
+    left: 6px; 
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23333'%3E%3Cpath d='M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z'%3E%3C/path%3E%3C/svg%3E");
+    transform: scale(0) rotate(180deg);
+}
+
+.theme-toggle-label .moon {
+    right: 6px; 
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23fff'%3E%3Cpath d='M9.37 5.51c-.18.64-.27 1.31-.27 1.99 0 4.08 3.32 7.4 7.4 7.4.68 0 1.35-.09 1.99-.27C17.45 17.19 14.93 19 12 19c-3.86 0-7-3.14-7-7 0-2.93 1.81-5.45 4.37-6.49z'%3E%3C/path%3E%3C/svg%3E");
+    transform: scale(1) rotate(0);
+}
+
+.theme-toggle-input:checked + .theme-toggle-label .sun {
+    transform: scale(1) rotate(360deg);
+}
+
+.theme-toggle-input:checked + .theme-toggle-label .moon {
+    transform: scale(0) rotate(-180deg);
+}
+
+.theme-toggle-input:checked + .theme-toggle-label .toggle-slider {
+    background: #90caf9;
+}
+
+.theme-toggle-label:hover .toggle-slider {
+    box-shadow: 0 0 0 2px var(--accent);
+}

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отправка данных</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fa;
+            color: #222;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            animation: fadeIn 0.6s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: none; }
+        }
+        h1 {
+            color: #2e7d32;
+            margin-bottom: 20px;
+        }
+        .message {
+            margin: 20px 0;
+            font-size: 1.1em;
+            color: #333;
+            line-height: 1.6;
+        }
+        .message p {
+            margin: 10px 0;
+        }
+        .doc-id {
+            font-size: 0.9em;
+            color: #666;
+            background: #f5f5f5;
+            padding: 8px 12px;
+            border-radius: 6px;
+            display: inline-block;
+            margin-top: 15px;
+            font-family: monospace;
+        }
+        .dark-theme .doc-id {
+            background: #3a3a3a;
+            color: #bbb;
+        }
+        .btn {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            background: #388e3c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .btn:active {
+            transform: translateY(0);
+        }
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+        .success-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+        .success-icon .circle {
+            fill: #4CAF50;
+            opacity: 0.1;
+        }
+        .success-icon .check {
+            fill: none;
+            stroke: #4CAF50;
+            stroke-width: 5;
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            animation: draw 0.6s cubic-bezier(0.65, 0, 0.45, 1) 0.3s forwards;
+        }
+        @keyframes draw {
+            to { stroke-dashoffset: 0; }
+        }
+        .dark-theme {
+            background: #1a1a1a;
+            color: #f0f0f0;
+        }
+        .dark-theme .container {
+            background: #2d2d2d;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+        }
+        .dark-theme .message {
+            color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-icon">
+            <svg viewBox="0 0 100 100">
+                <circle class="circle" cx="50" cy="50" r="45"/>
+                <path class="check" d="M30,50 L45,65 L70,35" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <h1>Успех!</h1>
+        <div class="message">
+            <p>Ваши данные успешно отправлены.</p>
+            <p class="doc-id">ID документа: <span id="docId">загрузка...</span></p>
+        </div>
+        <a href="/" class="btn">Вернуться на главную</a>
+    </div>
+
+    <script>
+        // Проверяем, какая тема установлена
+        if (localStorage.getItem('theme') === 'dark' || 
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.body.classList.add('dark-theme');
+        }
+
+        // Получаем ID документа из URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const docId = urlParams.get('id');
+        if (docId) {
+            document.getElementById('docId').textContent = docId;
+        }
+    </script>
+</body>
+</html>
