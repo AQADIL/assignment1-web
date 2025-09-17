@@ -190,44 +190,65 @@
                 const messageDiv = document.getElementById('formMessage');
                 
                 try {
+                    // Disable form and show loading state
                     submitBtn.disabled = true;
                     submitBtn.value = 'Sending...';
-                    messageDiv.textContent = '';
-                    messageDiv.className = 'form-message';
+                    messageDiv.textContent = 'Sending your message...';
+                    messageDiv.className = 'form-message info';
                     
+                    // Prepare form data
                     const formData = {
-                        name: form.name.value,
-                        email: form.email.value,
-                        color: form.color.value,
+                        name: form.name.value.trim(),
+                        email: form.email.value.trim(),
+                        color: form.color.value || '#000000',
                         timestamp: new Date().toISOString()
                     };
                     
+                    console.log('Sending form data:', formData);
+                    
+                    // Send request to server
                     const response = await fetch('/submit', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
+                            'Accept': 'application/json'
                         },
                         body: JSON.stringify(formData)
                     });
                     
-                    const result = await response.json();
+                    // Handle response
+                    const result = await response.json().catch(err => {
+                        console.error('Error parsing JSON response:', err);
+                        throw new Error('Invalid response from server');
+                    });
                     
-                    if (response.ok && result.redirectUrl) {
+                    console.log('Server response:', result);
+                    
+                    if (!response.ok) {
+                        throw new Error(result.message || `Server error: ${response.status}`);
+                    }
+                    
+                    if (result.redirectUrl) {
                         window.location.href = result.redirectUrl;
                     } else {
-                        throw new Error(result.message || 'Failed to send message');
+                        throw new Error('No redirect URL provided');
                     }
                 } catch (error) {
+                    console.error('Form submission error:', error);
                     messageDiv.textContent = error.message || 'An error occurred while sending the message.';
                     messageDiv.className = 'form-message error';
                 } finally {
+                    // Reset form state
                     submitBtn.disabled = false;
                     submitBtn.value = 'Send Message';
                     
-                    setTimeout(() => {
-                        messageDiv.textContent = '';
-                        messageDiv.className = 'form-message';
-                    }, 5000);
+                    // Clear message after delay
+                    if (messageDiv.textContent) {
+                        setTimeout(() => {
+                            messageDiv.textContent = '';
+                            messageDiv.className = 'form-message';
+                        }, 10000);
+                    }
                 }
             });
         </script>
