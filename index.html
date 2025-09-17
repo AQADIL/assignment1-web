@@ -1,34 +1,235 @@
-
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Форма отправки данных в Firebase</title>
-    <style>
-        body { font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; }
-        form { background-color: #f5f5f5; padding: 20px; border-radius: 8px; }
-        label { display: block; margin-bottom: 5px; }
-        input[type="text"], input[type="email"] { width: 100%; padding: 8px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 4px; }
-        input[type="color"] { margin-bottom: 15px; }
-        input[type="submit"] { background-color: #4CAF50; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; }
-        input[type="submit"]:hover { background-color: #45a049; }
-    </style>
+    <title>HelloWorld!</title>
+    <link rel="stylesheet" href="/public/css/styles.css">
 </head>
 <body>
-    <h1>Отправка данных в Firebase</h1>
-    <form action="/submit" method="POST">
-        <label for="name">Имя:</label>
-        <input type="text" id="name" name="name" required><br><br>
+    <header class="site-header">
+        <div class="header-content">
+            <h1>Welcome to My Website</h1>
+            <div class="theme-switch-wrapper">
+                <label class="theme-switch" for="themeToggle">
+                    <input type="checkbox" id="themeToggle" class="theme-toggle-input" aria-label="Toggle dark/light mode">
+                    <span class="theme-slider round">
+                        <span class="theme-icon sun">
+                            <i class="fas fa-sun"></i>
+                        </span>
+                        <span class="theme-icon moon">
+                            <i class="fas fa-moon"></i>
+                        </span>
+                    </span>
+                </label>
+            </div>
+        </div>
+    </header>
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br><br>
+    <div class="container">
+        <h3 id="about">About Me</h3>
+        <p>Hello! My name is Alish Akadil. I am a software engineering student who is passionate about coding, mathematics, and teaching. I enjoy learning new technologies and sharing knowledge with others.</p>
+        <p>I'm currently a web developer and founder of AkadilEDU platform.</p>
+        
+        <hr>
+        
+        <h3 id="hobbies">My Hobbies</h3>
+        <ol>
+            <li>Programming</li>
+            <li>Enjoy life</li>
+            <li>Playing chess</li>
+        </ol>
+        
+        <hr>
+        
+        <h3>My Favorite Websites</h3>
+        <ul>
+            <li><a href="https://akadil-edu-5.vercel.app" target="_blank">AKadilEDU</a></li>
+            <li><a href="https://github.com" target="_blank">GitHub</a></li>
+        </ul>
+        
+        <hr>
+        
+        <h3>My Photo</h3>
+        <img src="public/img/img.png" alt="My Photo" width="200">
+        
+        <hr>
+        
+        <h3>My Weekly Class Schedule</h3>
+        <table class="schedule-table">
+            <tr>
+                <th>Subject</th>
+                <th>Day</th>
+                <th>Time</th>
+            </tr>
+            <tr>
+                <td>Web Technologies</td>
+                <td>Monday</td>
+                <td>09:00</td>
+            </tr>
+            <tr>
+                <td>Database Systems</td>
+                <td>Tuesday</td>
+                <td>11:00</td>
+            </tr>
+            <tr>
+                <td>Algorithms</td>
+                <td>Wednesday</td>
+                <td>14:00</td>
+            </tr>
+        </table>
+        
+        <hr>
+        
+        <h3>Contact Me</h3>
+        <form class="contact-form" id="contactForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            
+            <label for="color">Favorite Color:</label>
+            <input type="color" id="color" name="color" value="#4CAF50">
+            
+            <input type="submit" value="Send Message" id="submitBtn">
+            <div id="formMessage" class="form-message"></div>
+        </form>
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const themeToggle = document.getElementById('themeToggle');
+                const themeSwitch = themeToggle.closest('.theme-switch');
+                const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+                const html = document.documentElement;
+                
+      
+                html.classList.remove('theme-transition');
+                
+                const currentTheme = localStorage.getItem('theme') || 
+                    (prefersDarkScheme.matches ? 'dark' : 'light');
+           
+                if (currentTheme === 'dark') {
+                    html.classList.add('dark-theme');
+                    themeToggle.checked = true;
+                } else {
+                    html.classList.remove('dark-theme');
+                    themeToggle.checked = false;
+                }
 
-        <label for="color">Любимый цвет:</label>
-        <input type="color" id="color" name="color"><br><br>
+                setTimeout(() => {
+                    html.classList.add('theme-transition');
+                }, 100);
+                
+                themeToggle.addEventListener('change', function() {
+                    themeSwitch.classList.add('loading');
+                    
+                    if (this.checked) {
+                        html.classList.add('dark-theme');
+                        localStorage.setItem('theme', 'dark');
+                    } else {
+                        html.classList.remove('dark-theme');
+                        localStorage.setItem('theme', 'light');
+                    }
+                    
+                    setTimeout(() => {
+                        themeSwitch.classList.remove('loading');
+                    }, 500);
+                });
+                
+                prefersDarkScheme.addEventListener('change', e => {
+                    if (!localStorage.getItem('theme')) {
+                        themeSwitch.classList.add('loading');
+                        
+                        if (e.matches) {
+                            html.classList.add('dark-theme');
+                            themeToggle.checked = true;
+                        } else {
+                            html.classList.remove('dark-theme');
+                            themeToggle.checked = false;
+                        }
+                        
+                        setTimeout(() => {
+                            themeSwitch.classList.remove('loading');
+                        }, 500);
+                    }
+                });
+                
+                const sunIcon = document.querySelector('.theme-icon.sun i');
+                sunIcon.style.transition = 'transform 1s ease-out';
+                
+                themeSwitch.addEventListener('mouseenter', () => {
+                    if (!themeToggle.checked) {
+                        sunIcon.style.transform = 'rotate(180deg)';
+                    }
+                });
+                
+                themeSwitch.addEventListener('mouseleave', () => {
+                    if (!themeToggle.checked) {
+                        sunIcon.style.transform = 'rotate(0deg)';
+                    }
+                });
+            });
+            
+            document.getElementById('contactForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const form = e.target;
+                const submitBtn = document.getElementById('submitBtn');
+                const messageDiv = document.getElementById('formMessage');
+                
+                try {
+                    submitBtn.disabled = true;
+                    submitBtn.value = 'Sending...';
+                    messageDiv.textContent = '';
+                    messageDiv.className = 'form-message';
+                    
+                    const formData = {
+                        name: form.name.value,
+                        email: form.email.value,
+                        color: form.color.value,
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    const response = await fetch('/submit', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData)
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (response.ok && result.redirectUrl) {
+                        window.location.href = result.redirectUrl;
+                    } else {
+                        throw new Error(result.message || 'Failed to send message');
+                    }
+                } catch (error) {
+                    messageDiv.textContent = error.message || 'An error occurred while sending the message.';
+                    messageDiv.className = 'form-message error';
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.value = 'Send Message';
+                    
+                    setTimeout(() => {
+                        messageDiv.textContent = '';
+                        messageDiv.className = 'form-message';
+                    }, 5000);
+                }
+            });
+        </script>
+        
+        <div class="form-message" id="formMessage"></div>
+    </div>
+    
+    <footer class="site-footer">
+        <div class="footer-content">
+            <p>Made with <span class="heart">❤️</span> by <a href="https://github.com/AQADIL" target="_blank" class="footer-link">Akadil</a></p>
+            <p class="copyright">&copy; 2025 All Rights Reserved</p>
+        </div>
+    </footer>
 
-        <input type="submit" value="Отправить">
-    </form>
 </body>
 </html>
-    
