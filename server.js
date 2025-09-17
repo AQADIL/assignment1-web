@@ -5,17 +5,10 @@ const path = require("path");
 const fs = require("fs");
 const app = express();
 
-// Проверка наличия необходимых файлов
-console.log("Проверка наличия файлов...");
 const files = fs.readdirSync(__dirname);
-console.log("Файлы в директории:", files);
 
 if (!files.includes("index.html")) {
-    console.error("ОШИБКА: Файл index.html не найден в директории!");
-    console.log("Создаю базовый index.html...");
-    
-    const htmlContent = `
-<!DOCTYPE html>
+    const htmlContent = `<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -46,21 +39,15 @@ if (!files.includes("index.html")) {
         <input type="submit" value="Отправить">
     </form>
 </body>
-</html>
-    `;
+</html>`;
     
     fs.writeFileSync(path.join(__dirname, "index.html"), htmlContent);
-    console.log("Файл index.html создан успешно!");
 }
 
-// Настройка middleware для обработки тела запроса
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-// Раздача статических файлов (должно быть до определения маршрутов)
 app.use(express.static(__dirname));
 
-// Инициализация Firebase с учетными данными
 try {
     if (!files.includes("serviceAccountKey.json")) {
         throw new Error("Файл serviceAccountKey.json не найден");
@@ -71,28 +58,21 @@ try {
     admin.initializeApp({
         credential: admin.credential.cert(serviceAccount)
     });
-    
-    console.log("Firebase успешно инициализирован");
 } catch (error) {
     console.error("Ошибка при инициализации Firebase:", error);
-    console.error("Убедитесь, что файл serviceAccountKey.json существует и содержит правильные учетные данные");
     process.exit(1);
 }
 
 const db = admin.firestore();
 
-// Маршрут для обработки отправки формы
 app.post("/submit", async (req, res) => {
     try {
-        console.log("Получены данные формы:", req.body);
         const { name, email, color } = req.body;
 
-        // Проверка наличия обязательных полей
         if (!name || !email) {
             return res.status(400).send("Имя и email являются обязательными полями");
         }
 
-        // Сохранение данных в Firestore
         const docRef = await db.collection("responses").add({
             name,
             email,
@@ -100,43 +80,26 @@ app.post("/submit", async (req, res) => {
             createdAt: admin.firestore.FieldValue.serverTimestamp()
         });
 
-        console.log("Документ успешно добавлен с ID:", docRef.id);
-        // Отправляем JSON с URL для редиректа
         res.json({ 
             success: true, 
             redirectUrl: `/submit-success?id=${docRef.id}` 
         });
     } catch (error) {
-        console.error("Ошибка при записи в Firestore:", error);
-        console.error("Stack:", error.stack);
-        console.error("Request body:", req.body);
-        res.status(500).send(`<pre>${error.message}\n${error.stack}</pre><br>Request body: <pre>${JSON.stringify(req.body, null, 2)}</pre>`);
+        res.status(500).send(`<pre>${error.message}</pre>`);
     }
 });
 
-// Страница успешной отправки
 app.get("/submit-success", (req, res) => {
-    const docId = req.query.id || 'неизвестен';
     res.sendFile(path.join(__dirname, "submit.html"));
 });
 
-// Главная страница - этот маршрут должен быть после настройки статических файлов
 app.get("/", (req, res) => {
-    console.log("Получен запрос на главную страницу");
     res.sendFile(path.join(__dirname, "index.html"));
 });
 
-// Обработка ошибок 404
 app.use((req, res) => {
-    console.log(`404: Запрашиваемый ресурс не найден: ${req.url}`);
     res.status(404).send("Страница не найдена");
 });
 
-// Запуск сервера
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`==========================================================`);
-    console.log(`Сервер запущен на http://localhost:${PORT}`);
-    console.log(`Откройте браузер и перейдите по адресу: http://localhost:${PORT}`);
-    console.log(`==========================================================`);
-});
+app.listen(PORT);
