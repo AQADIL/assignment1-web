@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Форма успешно отправлена</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="stylesheet" href="/public/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -67,7 +68,7 @@
             animation: draw 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.5s forwards;
         }
         
-
+        /* Success message styles */
         h1 {
             color: var(--accent);
             margin: 20px 0 15px;
@@ -269,11 +270,13 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM fully loaded');
             
+            // Function to update document ID display
             function updateDocumentId() {
+                // Try to get ID from URL first
                 const urlParams = new URLSearchParams(window.location.search);
                 let docId = urlParams.get('id');
                 
-        
+                // If not in URL, try localStorage (for testing)
                 if (!docId) {
                     docId = localStorage.getItem('lastSubmissionId');
                     console.log('Got ID from localStorage:', docId);
@@ -293,13 +296,13 @@
                 }
             }
             
-     
+            // Enhanced Theme Toggle with Smooth Animations
             const themeToggle = document.getElementById('themeToggle');
             const themeSwitch = document.querySelector('.theme-switch');
             const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
             const html = document.documentElement;
             
-   
+            // Function to set theme
             const setTheme = (isDark) => {
                 if (isDark) {
                     html.classList.add('dark-theme');
@@ -312,10 +315,11 @@
                 }
             };
             
+            // Check for saved user preference or use system preference
             const savedTheme = localStorage.getItem('theme');
             const systemDark = prefersDarkScheme.matches;
             
-         
+            // Apply theme immediately without transition
             html.classList.remove('theme-transition');
             if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
                 setTheme(true);
@@ -323,25 +327,28 @@
                 setTheme(false);
             }
             
+            // Enable transitions after initial load
             setTimeout(() => {
                 html.classList.add('theme-transition');
             }, 100);
             
             if (themeToggle && themeSwitch) {
-                
+                // Listen for toggle changes
                 themeToggle.addEventListener('change', function() {
-     
+                    // Show loading spinner
                     themeSwitch.classList.add('loading');
                     
                     // Toggle theme
                     const isDark = this.checked;
                     setTheme(isDark);
                     
+                    // Hide spinner after animation completes
                     setTimeout(() => {
                         themeSwitch.classList.remove('loading');
                     }, 500);
                 });
                 
+                // Listen for system theme changes (if no explicit user preference)
                 prefersDarkScheme.addEventListener('change', e => {
                     if (!localStorage.getItem('theme')) {
                         themeSwitch.classList.add('loading');
@@ -353,6 +360,7 @@
                     }
                 });
                 
+                // Add hover effects for sun and moon icons
                 const sunIcon = document.querySelector('.theme-icon.sun i');
                 const moonIcon = document.querySelector('.theme-icon.moon i');
                 
@@ -375,8 +383,10 @@
                 }
             }
             
+            // Initial update
             updateDocumentId();
             
+            // Also check after a short delay in case URL changes
             setTimeout(updateDocumentId, 100);
         });
     </script>
