@@ -44,13 +44,29 @@ if (!files.includes("index.html")) {
     fs.writeFileSync(path.join(__dirname, "index.html"), htmlContent);
 }
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// Configure body parser to handle JSON and URL-encoded data
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Serve static files from public directory
+app.use(express.static(path.join(__dirname, 'public')));
+// Serve root files (like index.html)
 app.use(express.static(__dirname));
+
+// Log all requests for debugging
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+    next();
+});
 
 // Serve favicon.ico
 app.get('/favicon.ico', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'favicon.ico'));
+});
+
+// Test endpoint
+app.get('/test', (req, res) => {
+    res.send('Server is running!');
 });
 
 try {
@@ -72,25 +88,38 @@ const db = admin.firestore();
 
 app.post("/submit", async (req, res) => {
     try {
+        console.log('Received submission:', req.body);
+        
         const { name, email, color } = req.body;
 
         if (!name || !email) {
-            return res.status(400).send("Имя и email являются обязательными полями");
+            console.log('Validation failed: name or email missing');
+            return res.status(400).json({ 
+                success: false, 
+                message: "Name and email are required fields" 
+            });
         }
 
         const docRef = await db.collection("responses").add({
-            name,
-            email,
-            color: color || "#000000",
+            name: name.trim(),
+            email: email.trim(),
+            color: (color || "#000000").trim(),
             createdAt: admin.firestore.FieldValue.serverTimestamp()
         });
 
+        console.log('Form data saved with ID:', docRef.id);
+        
         res.json({ 
             success: true, 
-            redirectUrl: `/submit-success?id=${docRef.id}` 
+            redirectUrl: `/submit-success?id=${docRef.id}`,
+            message: "Form submitted successfully"
         });
     } catch (error) {
-        res.status(500).send(`<pre>${error.message}</pre>`);
+        console.error('Error processing form submission:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: error.message || 'An error occurred while processing your request'
+        });
     }
 });
 
