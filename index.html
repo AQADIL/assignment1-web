@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HelloWorld!</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="stylesheet" href="/public/css/styles.css">
 </head>
 <body>
@@ -97,18 +98,21 @@
         </form>
         
         <script>
+            // Enhanced Theme Toggle with Smooth Animations
             document.addEventListener('DOMContentLoaded', () => {
                 const themeToggle = document.getElementById('themeToggle');
                 const themeSwitch = themeToggle.closest('.theme-switch');
                 const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
                 const html = document.documentElement;
                 
-      
+                // Prevent transitions on initial load
                 html.classList.remove('theme-transition');
                 
+                // Check for saved user preference or use system preference
                 const currentTheme = localStorage.getItem('theme') || 
                     (prefersDarkScheme.matches ? 'dark' : 'light');
-           
+                
+                // Apply theme immediately without transition
                 if (currentTheme === 'dark') {
                     html.classList.add('dark-theme');
                     themeToggle.checked = true;
@@ -116,14 +120,18 @@
                     html.classList.remove('dark-theme');
                     themeToggle.checked = false;
                 }
-
+                
+                // Enable transitions after initial load
                 setTimeout(() => {
                     html.classList.add('theme-transition');
                 }, 100);
                 
+                // Listen for toggle changes
                 themeToggle.addEventListener('change', function() {
+                    // Show loading spinner
                     themeSwitch.classList.add('loading');
                     
+                    // Start theme transition
                     if (this.checked) {
                         html.classList.add('dark-theme');
                         localStorage.setItem('theme', 'dark');
@@ -132,11 +140,13 @@
                         localStorage.setItem('theme', 'light');
                     }
                     
+                    // Hide spinner after animation completes
                     setTimeout(() => {
                         themeSwitch.classList.remove('loading');
                     }, 500);
                 });
                 
+                // Listen for system theme changes (if no explicit user preference)
                 prefersDarkScheme.addEventListener('change', e => {
                     if (!localStorage.getItem('theme')) {
                         themeSwitch.classList.add('loading');
@@ -155,6 +165,7 @@
                     }
                 });
                 
+                // Add smooth rotation to sun icon on hover
                 const sunIcon = document.querySelector('.theme-icon.sun i');
                 sunIcon.style.transition = 'transform 1s ease-out';
                 
