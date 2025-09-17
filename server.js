@@ -48,6 +48,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
 
+// Serve favicon.ico
+app.get('/favicon.ico', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'favicon.ico'));
+});
+
 try {
     if (!files.includes("serviceAccountKey.json")) {
         throw new Error("Файл serviceAccountKey.json не найден");
